@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { randomInt, randomBytes } from "crypto";
+import { randomInt, randomBytes, createHash } from "crypto";
 import bcrypt from "bcrypt";
 import { rateLimit } from "express-rate-limit";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -817,11 +817,12 @@ out
       }
 
       const token = randomBytes(32).toString("hex");
+      const tokenHash = createHash("sha256").update(token).digest("hex");
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
       await db.insert(passwordResetTokens).values({
         userId: user.id,
-        token,
+        token: tokenHash,
         expiresAt,
         used: false,
       });
@@ -855,7 +856,7 @@ out
         .from(passwordResetTokens)
         .where(
           and(
-            eq(passwordResetTokens.token, token),
+            eq(passwordResetTokens.token, createHash("sha256").update(token).digest("hex")),
             eq(passwordResetTokens.used, false),
             gte(passwordResetTokens.expiresAt, new Date()),
           ),
