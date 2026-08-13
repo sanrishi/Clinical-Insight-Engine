@@ -549,7 +549,9 @@ class PythonDaemonManager {
     if (this.process) {
       try {
         this.process.kill();
-      } catch (e) {}
+      } catch (e) {
+        logger.warn("Failed to kill Python subprocess during teardown", { error: e });
+      }
       this.process = null;
     }
   }

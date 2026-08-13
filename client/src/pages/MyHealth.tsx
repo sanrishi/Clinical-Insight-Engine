@@ -110,7 +110,9 @@ export default function MyHealth() {
       if (!response.ok) return;
       const data = await response.json();
       setTrends(data ?? []);
-    } catch {}
+    } catch (error) {
+      console.error("Failed to fetch health trends", error);
+    }
   }
 
   async function handleLogout() {

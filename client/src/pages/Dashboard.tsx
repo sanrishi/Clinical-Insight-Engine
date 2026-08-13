@@ -179,7 +179,9 @@ export default function Dashboard() {
           if (!allowedKeys.includes(k)) return;
           try {
             setValue(k as keyof AssessmentFormData, v as any, { shouldDirty: true });
-          } catch (e) {}
+          } catch (e) {
+            console.error("Failed to apply draft field", k, e);
+          }
         });
       }
     } catch (e) {

@@ -36,7 +36,9 @@ export default function CounterfactualAnalysis() {
     try {
       const names = await ApiClient.get<string[]>(`/api/assessments/autocomplete?q=${encodeURIComponent(q)}`);
       setSuggestions(names);
-    } catch {}
+    } catch (error) {
+      console.error("Failed to fetch counterfactual suggestions", error);
+    }
   }, []);
 
   useEffect(() => {

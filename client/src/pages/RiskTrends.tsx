@@ -79,7 +79,9 @@ export default function RiskTrends() {
     try {
       const names = await ApiClient.get<string[]>(`/api/assessments/autocomplete?q=${encodeURIComponent(q)}`);
       setSuggestions(names);
-    } catch {}
+    } catch (error) {
+      console.error("Failed to fetch assessment suggestions", error);
+    }
   }, []);
 
   useEffect(() => {
